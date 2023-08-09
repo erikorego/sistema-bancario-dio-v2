@@ -1,8 +1,3 @@
-limite_de_saques_diarios = 3
-VALOR_LIMITE_DE_SAQUE = 500
-saldo = 0
-extrato = ''
-
 def menu():
     menu = """
             ===============SISTEMA BANCÁRIO DIO================
@@ -31,42 +26,52 @@ def saque(*, saldo, extrato, limite_saque, numero_saque):
                   Operação Cancelada!
               """)
     return saldo, extrato, numero_saque
-    
 
-
-while True:
-    opcao = menu()
-    if opcao == 1:
-         saldo, extrato, limite_de_saques_diarios = saque(saldo=saldo, limite_saque=VALOR_LIMITE_DE_SAQUE, numero_saque=limite_de_saques_diarios, extrato=extrato)
-         
-    elif opcao == 2:
-        valor_deposito = float(input("Insira o valor que deseja depositar: "))
-        if valor_deposito < 0:
-            print("""
-                  Você não pode depositar um valor negativo!
-                  Operação cancelada!
-""")
-        elif valor_deposito == 0:
-            print('''
-                  Operação Inválida!
-                  Você não pode depositar 0 reais
-                  Operação cancelada!
-''')
-        else:
-            saldo += valor_deposito
-            extrato += f"DEPÓSITO: R$ {valor_deposito: .2f}. Saldo {saldo: .2f}\n"
-            print("Operação realizada com sucesso!")
-    elif opcao == 3:
-        if extrato == "":
-            print("Nenhuma operação realizada")
-        else:
-            print(extrato)
-            pausa = input("aperte qualquer botão para continuar... ")
-    elif opcao == 0:
-        break
-    else:
+def deposito (saldo, extrato ,/):
+    valor = float(input("Insira o valor que deseja depositar: "))
+    if valor < 0:
+        print("""
+              Você não pode depositar um valor negativo!
+              Operação cancelada!
+              """)
+    elif valor == 0:
         print('''
-            Opção Inválida!
-            Tente novamente.
+              Operação Inválida!
+              Você não pode depositar 0 reais
+              Operação cancelada!
               ''')
-    
+    else:
+        saldo += valor
+        extrato += f"DEPÓSITO: R$ {valor: .2f}. Saldo {saldo: .2f}\n"
+        print("Operação realizada com sucesso!")
+    return saldo, extrato
+
+def exibir_extrato(saldo,/,*,extrato):
+    if extrato == "":
+        return print("Nenhuma operação realizada")
+    else:
+        return print(extrato)    
+
+def main():
+    limite_de_saques_diarios = 3
+    VALOR_LIMITE_DE_SAQUE = 500
+    saldo = 0
+    extrato = ''
+    while True:
+        opcao = menu()
+        if opcao == 1:
+            saldo, extrato, limite_de_saques_diarios = saque(saldo=saldo, limite_saque=VALOR_LIMITE_DE_SAQUE, numero_saque=limite_de_saques_diarios, extrato=extrato)
+        elif opcao == 2:
+            saldo, extrato = deposito(saldo, extrato)
+        elif opcao == 3:
+            exibir_extrato(saldo, extrato=extrato)
+
+        elif opcao == 0:
+            break
+        else:
+            print('''
+                Opção Inválida!
+                Tente novamente.
+                ''')
+
+main()
