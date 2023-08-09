@@ -14,7 +14,7 @@ def menu():
             :"""
     return int(input(menu))
 
-def saque(*, valor, saldo, extrato, limite_saque, numero_saque):
+def saque(*, saldo, extrato, limite_saque, numero_saque):
     if numero_saque > 0:
         valor = float(input("Insira o valor que deseja sacar: "))
         if valor > limite_saque:
@@ -22,7 +22,7 @@ def saque(*, valor, saldo, extrato, limite_saque, numero_saque):
         elif valor <= saldo:
             saldo -= valor
             extrato += f"SAQUE: R$ {valor: .2f}. Saldo {saldo: .2f}\n"
-            limite_de_saques_diarios -= 1
+            numero_saque -= 1
             print("A operação foi realizada com sucesso")
         else:
             print("Saldo insuficiente!")
@@ -30,14 +30,15 @@ def saque(*, valor, saldo, extrato, limite_saque, numero_saque):
         print("""O limite diário de Saques foi atingido.
                   Operação Cancelada!
               """)
-    return saldo, extrato
+    return saldo, extrato, numero_saque
     
 
 
 while True:
     opcao = menu()
     if opcao == 1:
-         saque()
+         saldo, extrato, limite_de_saques_diarios = saque(saldo=saldo, limite_saque=VALOR_LIMITE_DE_SAQUE, numero_saque=limite_de_saques_diarios, extrato=extrato)
+         
     elif opcao == 2:
         valor_deposito = float(input("Insira o valor que deseja depositar: "))
         if valor_deposito < 0:
