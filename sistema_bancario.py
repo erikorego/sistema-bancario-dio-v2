@@ -5,6 +5,10 @@ def menu():
             1 - Saque
             2 - Depósito
             3 - Extrato
+            4 - Cadastrar Cliente
+            5 - Listar Clientes
+            6 - Cadastrar Nova Conta
+            7 - Listar Contas
             0 - Sair
             :"""
     return int(input(menu))
@@ -52,11 +56,44 @@ def exibir_extrato(saldo,/,*,extrato):
     else:
         return print(extrato)    
 
+def criar_cliente(lista_de_clientes):
+    cpf = int(input("Insira seu CPF (somente números): "))
+    cliente = check_cpf(cpf, lista_de_clientes)
+
+    if cliente:
+        print("\nUm cliente com esse CPF já está cadastrado!!")
+        return
+    
+    nome = input("Insira seu nome completo: ")
+    print("Insira sua data de nascimento: ")
+    dia = int(input("\ndia: "))
+    mes = int(input("\nmês: "))
+    ano = int(input("\nano: "))
+    data_de_nascimento = f'{dia}/{mes}/{ano}'
+    print("Agora informe seu endereço: ")
+    logradouro = input("\nQual o seu logradouro?\n")
+    numero = input("\nE o número da sua casa/apartamento?\n")
+    bairro = input("\nEm que bairro você mora?\n")
+    cidade = input("\nQual a cidade que você mora?\n")
+    estado = input("\n Em que estado você mora (apenas a sigla)?\n")
+    endereco = f'{logradouro},{numero} - {bairro} - {cidade}/{estado}'
+
+    lista_de_clientes.append({"nome": nome, "data_de_nascimento": data_de_nascimento, "cpf": cpf, "endereco": endereco})
+    print("Cliente cadastrado com sucesso!")
+
+def check_cpf(cpf, lista_de_clientes):
+    lista_filtrada = [cliente for cliente in lista_de_clientes if cliente["cpf"] == cpf]
+    return lista_de_clientes[0] if lista_filtrada else None
+
 def main():
+
     limite_de_saques_diarios = 3
     VALOR_LIMITE_DE_SAQUE = 500
     saldo = 0
     extrato = ''
+    lista_de_clientes = []
+    contas = []
+
     while True:
         opcao = menu()
         if opcao == 1:
@@ -65,6 +102,8 @@ def main():
             saldo, extrato = deposito(saldo, extrato)
         elif opcao == 3:
             exibir_extrato(saldo, extrato=extrato)
+        elif opcao == 4:
+            criar_cliente(lista_de_clientes)
 
         elif opcao == 0:
             break
