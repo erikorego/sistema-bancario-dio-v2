@@ -14,24 +14,30 @@ def menu():
             :"""
     return int(input(menu))
 
+def saque(*, valor, saldo, extrato, limite_saque, numero_saque):
+    if numero_saque > 0:
+        valor = float(input("Insira o valor que deseja sacar: "))
+        if valor > limite_saque:
+            print("O limite de valor de saque foi atingido\nOperação Cancelada!")
+        elif valor <= saldo:
+            saldo -= valor
+            extrato += f"SAQUE: R$ {valor: .2f}. Saldo {saldo: .2f}\n"
+            limite_de_saques_diarios -= 1
+            print("A operação foi realizada com sucesso")
+        else:
+            print("Saldo insuficiente!")
+    else:
+        print("""O limite diário de Saques foi atingido.
+                  Operação Cancelada!
+              """)
+    return saldo, extrato
+    
+
+
 while True:
     opcao = menu()
     if opcao == 1:
-        if limite_de_saques_diarios > 0:
-            valor = float(input("Insira o valor que deseja sacar: "))
-            if valor > 500:
-                print("O limite de valor de saque foi atingido\nOperação Cancelada!")
-            elif valor <= saldo:
-                saldo -= valor
-                extrato += f"SAQUE: R$ {valor: .2f}. Saldo {saldo: .2f}\n"
-                limite_de_saques_diarios -= 1
-                print("A operação foi realizada com sucesso")
-            else:
-                print("Saldo insuficiente!")
-        else:
-            print("""O limite diário de Saques foi atingido.
-                  Operação Cancelada!
-""")
+         saque()
     elif opcao == 2:
         valor_deposito = float(input("Insira o valor que deseja depositar: "))
         if valor_deposito < 0:
