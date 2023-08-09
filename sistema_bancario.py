@@ -3,17 +3,19 @@ VALOR_LIMITE_DE_SAQUE = 500
 saldo = 0
 extrato = ''
 
-menu = """
-===============SISTEMA BANCÁRIO DIO================
-Escolha uma opção:
-1 - Saque
-2 - Depósito
-3 - Extrato
-0 - Sair
-:"""
+def menu():
+    menu = """
+            ===============SISTEMA BANCÁRIO DIO================
+            Escolha uma opção:
+            1 - Saque
+            2 - Depósito
+            3 - Extrato
+            0 - Sair
+            :"""
+    return int(input(menu))
 
 while True:
-    opcao = int(input(menu))
+    opcao = menu()
     if opcao == 1:
         if limite_de_saques_diarios > 0:
             valor = float(input("Insira o valor que deseja sacar: "))
