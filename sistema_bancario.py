@@ -66,16 +66,16 @@ def criar_cliente(lista_de_clientes):
     
     nome = input("Insira seu nome completo: ")
     print("Insira sua data de nascimento: ")
-    dia = int(input("\ndia: "))
-    mes = int(input("\nmês: "))
-    ano = int(input("\nano: "))
+    dia = int(input("dia: "))
+    mes = int(input("mês: "))
+    ano = int(input("ano: "))
     data_de_nascimento = f'{dia}/{mes}/{ano}'
-    print("Agora informe seu endereço: ")
-    logradouro = input("\nQual o seu logradouro?\n")
-    numero = input("\nE o número da sua casa/apartamento?\n")
-    bairro = input("\nEm que bairro você mora?\n")
-    cidade = input("\nQual a cidade que você mora?\n")
-    estado = input("\n Em que estado você mora (apenas a sigla)?\n")
+    print("Agora informe seu endereço: \n")
+    logradouro = input("Qual o seu logradouro?\n")
+    numero = input("E o número da sua casa/apartamento?\n")
+    bairro = input("Em que bairro você mora?\n")
+    cidade = input("Qual a cidade que você mora?\n")
+    estado = input("Em que estado você mora (apenas a sigla)?\n")
     endereco = f'{logradouro},{numero} - {bairro} - {cidade}/{estado}'
 
     lista_de_clientes.append({"nome": nome, "data_de_nascimento": data_de_nascimento, "cpf": cpf, "endereco": endereco})
@@ -85,26 +85,70 @@ def check_cpf(cpf, lista_de_clientes):
     lista_filtrada = [cliente for cliente in lista_de_clientes if cliente["cpf"] == cpf]
     return lista_de_clientes[0] if lista_filtrada else None
 
+def criar_conta(agencia, numero_da_conta, lista_de_clientes):
+    cpf = input("Informe o CPF do usuário: ")
+    cliente = check_cpf(cpf, lista_de_clientes)
+
+    if cliente:
+        print("A conta foi criada com sucesso!!")
+        return {"agencia": agencia, "conta": numero_da_conta, "cliente": cliente}
+    
+    print("""
+          O CPF informado não pertence a um cliente cadastrado.
+          Faça o cadastro do cliente e, depois, retorne para a criação da conta
+          """)
+
 def main():
 
-    limite_de_saques_diarios = 3
+    AGENCIA = "0001"
     VALOR_LIMITE_DE_SAQUE = 500
+    limite_de_saques_diarios = 3
     saldo = 0
     extrato = ''
     lista_de_clientes = []
     contas = []
 
     while True:
+        
         opcao = menu()
+        
         if opcao == 1:
             saldo, extrato, limite_de_saques_diarios = saque(saldo=saldo, limite_saque=VALOR_LIMITE_DE_SAQUE, numero_saque=limite_de_saques_diarios, extrato=extrato)
+       
         elif opcao == 2:
             saldo, extrato = deposito(saldo, extrato)
+
         elif opcao == 3:
             exibir_extrato(saldo, extrato=extrato)
+
         elif opcao == 4:
             criar_cliente(lista_de_clientes)
 
+        elif opcao == 5:
+            linha = ""
+            for cliente in lista_de_clientes:
+                linha += f"""
+                Nome = \t{cliente["nome"]}
+                CPF = \t{cliente["cpf"]}
+"""
+            print(linha)
+
+        elif opcao == 6:
+            numero_da_conta = len(contas) + 1
+            conta = criar_conta(AGENCIA, numero_da_conta, lista_de_clientes)
+
+            if conta: 
+                contas.append(conta)
+
+        elif opcao == 7:
+            linha = ""
+            for conta in contas:
+                linha += f"""
+                Agencia = \t{conta["agencia"]}
+                Conta = \t{conta["conta"]}
+                Títular = \t{conta["cliente"]["cpf"]}\n
+                """
+            print(linha)
         elif opcao == 0:
             break
         else:
